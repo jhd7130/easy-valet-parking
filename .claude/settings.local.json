@@ -1,0 +1,26 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(tail:*)",
+      "Bash(nslookup:*)",
+      "Bash(SPRING_PROFILES_ACTIVE=supabase ./gradlew bootRun:*)",
+      "Bash(nc:*)",
+      "Bash(PGPASSWORD='Jhd01043957130!' psql:*)",
+      "Bash(head:*)",
+      "Bash(for region in ap-northeast-1 us-east-1 us-west-1 ap-southeast-1 eu-west-1 eu-central-1 ap-south-1 us-east-2 us-west-2 eu-west-2 sa-east-1; do echo -n \"Testing $region: \" && PGPASSWORD='Jhd01043957130!' timeout 5 bash -c \"echo 'SELECT 1;' | java -cp /Users/loganjeong/.gradle/caches/modules-2/files-2.1/org.postgresql/postgresql/42.7.3/*/postgresql-42.7.3.jar -Djdbc.drivers=org.postgresql.Driver -jar /dev/null 2>&1\" || echo \"trying nc...\" && nc -zw3 aws-0-${region}.pooler.supabase.com 5432 2>&1 | grep -o \"succeeded\\\\|failed\" ; done 2>/dev/null)",
+      "Bash(curl:*)",
+      "Bash(dig AAAA:*)",
+      "Bash(dig A:*)",
+      "Bash(ping6:*)",
+      "Bash(brew services:*)",
+      "Bash(brew install:*)",
+      "Bash(export PATH=\"/opt/homebrew/opt/postgresql@17/bin:$PATH\" && createdb easyvalet 2>&1 && psql -d easyvalet -c \"SELECT 1;\" 2>&1)",
+      "Bash(export PATH=\"/opt/homebrew/opt/postgresql@17/bin:$PATH\" && psql -d easyvalet -c \"\\\\dt\" 2>&1)",
+      "Bash(export PATH=\"/opt/homebrew/opt/postgresql@17/bin:$PATH\" && psql -d easyvalet -c \"SELECT * FROM flyway_schema_history;\" 2>&1)",
+      "Bash(export PATH=\"/opt/homebrew/opt/postgresql@17/bin:$PATH\" && psql -d easyvalet -c \"SELECT * FROM affiliations;\" 2>&1)",
+      "Bash(pkill:*)",
+      "Bash(printf {\"email\":\"admin2@gmail.com\",\"password\":\"Test123!\",\"nickname\":\"Admin2\",\"affiliationId\":1}:*)",
+      "Bash(xargs ls:*)"
+    ]
+  }
+}

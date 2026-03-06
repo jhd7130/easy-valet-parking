@@ -1,0 +1,30 @@
+# Backend
+backend/build/
+backend/bin/
+backend/.gradle/
+backend/*.log
+backend/*.pid
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/*.log
+frontend/*.pid
+
+# IDE
+.idea/
+*.iml
+.vscode/
+*.swp
+
+# Environment
+.env
+.env.local
+.env.production
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Scripts
+repro_issue.sh
