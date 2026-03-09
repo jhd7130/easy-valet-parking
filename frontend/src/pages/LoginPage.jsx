@@ -20,6 +20,7 @@ export default function LoginPage() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setError('');
         setIsLoading(true);
         try {
             await login(email, password);
@@ -27,8 +28,10 @@ export default function LoginPage() {
         } catch (err) {
             if (err.response?.status === 403) {
                 setError('계정이 승인 대기 중입니다. 관리자 승인 후 로그인할 수 있습니다.');
+            } else if (err.response) {
+                setError('이메일 또는 비밀번호가 올바르지 않습니다.');
             } else {
-                setError('Invalid email or password');
+                setError('서버에 연결할 수 없습니다. 잠시 후 다시 시도해주세요.');
             }
         } finally {
             setIsLoading(false);

@@ -17,7 +17,17 @@ public class AffiliationService implements GetAffiliationsUseCase {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Affiliation> getPaidAffiliations() {
-        return affiliationRepositoryPort.findByIsPaidTrue();
+    public List<Affiliation> getAllAffiliations() {
+        return affiliationRepositoryPort.findAll();
+    }
+
+    @Override
+    @Transactional
+    public Affiliation createAffiliation(String name) {
+        Affiliation affiliation = Affiliation.builder()
+                .name(name)
+                .isPaid(false)
+                .build();
+        return affiliationRepositoryPort.save(affiliation);
     }
 }

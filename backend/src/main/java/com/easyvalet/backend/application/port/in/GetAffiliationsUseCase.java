@@ -4,5 +4,6 @@ import com.easyvalet.backend.domain.Affiliation;
 import java.util.List;
 
 public interface GetAffiliationsUseCase {
-    List<Affiliation> getPaidAffiliations();
+    List<Affiliation> getAllAffiliations();
+    Affiliation createAffiliation(String name);
 }

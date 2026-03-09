@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
-import { Car, ArrowRight, Mail, Lock, User, Building2 } from 'lucide-react';
+import { Car, ArrowRight, Mail, Lock, User, Building2, Plus } from 'lucide-react';
 import api from '../api/axios';
 
 export default function SignupPage() {
@@ -10,6 +10,8 @@ export default function SignupPage() {
     const [nickname, setNickname] = useState('');
     const [affiliationId, setAffiliationId] = useState('');
     const [affiliations, setAffiliations] = useState([]);
+    const [isCreatingNew, setIsCreatingNew] = useState(false);
+    const [newAffiliationName, setNewAffiliationName] = useState('');
     const { signup } = useAuth();
     const navigate = useNavigate();
     const [error, setError] = useState('');
@@ -28,12 +30,31 @@ export default function SignupPage() {
         fetchAffiliations();
     }, []);
 
+    const handleAffiliationChange = (e) => {
+        const value = e.target.value;
+        if (value === '__new__') {
+            setIsCreatingNew(true);
+            setAffiliationId('');
+        } else {
+            setIsCreatingNew(false);
+            setNewAffiliationName('');
+            setAffiliationId(value);
+        }
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsLoading(true);
         setError('');
         try {
-            const data = await signup(email, password, nickname, affiliationId ? parseInt(affiliationId) : null);
+            let finalAffiliationId = affiliationId ? parseInt(affiliationId) : null;
+
+            if (isCreatingNew && newAffiliationName.trim()) {
+                const res = await api.post('/affiliations', { name: newAffiliationName.trim() });
+                finalAffiliationId = res.data.id;
+            }
+
+            const data = await signup(email, password, nickname, finalAffiliationId);
             setSuccessMessage(data.message || '가입이 완료되었습니다. 관리자 승인 후 로그인할 수 있습니다.');
             setTimeout(() => navigate('/login'), 3000);
         } catch (err) {
@@ -121,25 +142,40 @@ export default function SignupPage() {
                         </div>
 
                         <div>
-                            <label className="block text-sm font-semibold text-slate-700 mb-2">Affiliation</label>
+                            <label className="block text-sm font-semibold text-slate-700 mb-2">소속 (선택)</label>
                             <div className="relative">
                                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                                     <Building2 className="h-5 w-5 text-slate-400" />
                                 </div>
                                 <select
-                                    value={affiliationId}
-                                    onChange={(e) => setAffiliationId(e.target.value)}
+                                    value={isCreatingNew ? '__new__' : affiliationId}
+                                    onChange={handleAffiliationChange}
                                     className="input-field pl-11 appearance-none"
-                                    required
                                 >
-                                    <option value="">Select your affiliation</option>
+                                    <option value="">소속 없이 가입</option>
                                     {affiliations.map((aff) => (
                                         <option key={aff.id} value={aff.id}>
                                             {aff.name}
                                         </option>
                                     ))}
+                                    <option value="__new__">+ 새 소속 만들기</option>
                                 </select>
                             </div>
+                            {isCreatingNew && (
+                                <div className="relative mt-2">
+                                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                        <Plus className="h-5 w-5 text-slate-400" />
+                                    </div>
+                                    <input
+                                        type="text"
+                                        value={newAffiliationName}
+                                        onChange={(e) => setNewAffiliationName(e.target.value)}
+                                        className="input-field pl-11"
+                                        placeholder="새 소속 이름 입력"
+                                        required
+                                    />
+                                </div>
+                            )}
                         </div>
 
                         <button
