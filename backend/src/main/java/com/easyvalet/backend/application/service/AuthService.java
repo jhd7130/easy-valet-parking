@@ -35,7 +35,7 @@ public class AuthService implements AuthUseCase {
                 .nickname(request.getNickname())
                 .role(User.Role.USER)
                 .affiliationId(request.getAffiliationId())
-                .isActive(false)
+                .isActive(true)
                 .build();
 
         User savedUser = userRepositoryPort.save(user);
@@ -43,7 +43,7 @@ public class AuthService implements AuthUseCase {
         return AuthDto.SignupResponse.builder()
                 .email(savedUser.getEmail())
                 .nickname(savedUser.getNickname())
-                .message("가입이 완료되었습니다. 관리자 승인 후 로그인할 수 있습니다.")
+                .message("가입이 완료되었습니다. 로그인해주세요.")
                 .build();
     }
 
